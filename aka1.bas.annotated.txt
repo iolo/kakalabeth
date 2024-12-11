@@ -1,0 +1,10 @@
+#
+# Start of BASIC
+# 64*256+0 = $4000
+#
+ 10  POKE 103,0: POKE 104,64
+#
+# -16302: full screen(no text)
+#
+ 20  HGR : POKE  - 16302,0
+ 30  PRINT  CHR$ (4)"RUN AKA6"

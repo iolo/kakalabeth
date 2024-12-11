@@ -1,0 +1,39 @@
+ 0  TEXT : HOME 
+#
+# Monitor and DOS registers
+#
+ 1  IF  PEEK (55) = 253 THEN  END 
+#
+# ??? Puts 3.5 volts out pin 13 of internal joystick socket(Output 2 on at 3.5 volts)
+#
+ 2  POKE  - 16292,1
+ 10  ONERR  GOTO 100
+ 20  PRINT "NOMON I,O,C": HOME 
+#
+# $3D0.$3D2(976-978) Jump vector to DOS warm start (JMP $9DBF) -> JMP $0301
+#
+ 22  POKE 977,1: POKE 978,3
+#
+# $3B8.$3CF(952-957)
+# $3B8 JSR $3EA ; $3EA Jump to replace DOS intercepts subroutine (JMP $A851; NOP; NOP)
+#      LDX #$02
+# $3BD LDA $E000
+#      CMP #$4C
+#      BEQ $3CB
+#      DEX
+#      STA $C080,X
+# ; $C082 Read ROM(no write)
+# ; $C080 Read RAM bank 2(no write)
+# ; $C081 Read ROM(write RAM bank 2), 
+#      BPL $3BD
+#      DB 02     ;???
+# $3CB LDX #$14
+#      JMP $D412 ; ???
+#
+# $3F2.$3F4(1010-1012) Ctrl+Reset vector (JMP $9DBF) -> ???
+#      DB B8 03 A6 ; ???
+ 26  DATA   32,234,3,162,2,173,0,224,201,76,240,7,202,157,128,192,16,243,2,162,20,76,18,212,184,3,166 
+ 27  FOR I = 952 TO 975: READ J: POKE I,J: NEXT : FOR I = 1010 TO 1012: READ J: POKE I,J: NEXT 
+ 30  TEXT : HOME : PRINT "RUN AKA0"
+ 99  END 
+ 100  GOTO 0

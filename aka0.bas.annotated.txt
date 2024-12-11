@@ -1,0 +1,110 @@
+ 1  TEXT : HOME : NORMAL : VTAB (5): HTAB (9): PRINT "WELCOME,  FOOLISH MORTAL": VTAB (7): HTAB (14): PRINT "INTO THE WORLD": VTAB (9): HTAB (16): INVERSE : PRINT "AKALABETH!": NORMAL 
+ 2  VTAB (11): HTAB (7): PRINT "HEREIN THOU SHALT FIND GRAND": VTAB (13): HTAB (16): INVERSE : PRINT "ADVENTURE!": NORMAL 
+ 3  VTAB (16): PRINT "        CREATED BY  LORD BRITISH": PRINT : PRINT "(C) 1980 BY CALIFORNIA PACIFIC COMPUTER"
+ 4  VTAB (23): HTAB (8): PRINT "(PRESS SPACE TO CONTINUE) ";: GET R$: PRINT 
+ 5  PRINT "BLOAD AKA4"
+# ???
+# $FE := 32
+# $FF := 32
+# $8048(32840) := $A9(169) ; LDA #
+# $8049(32841) := 0
+# CALL $8000(32768) ; <---- AKA4
+# $8048(32840) := $B1(177) ; LDA ind,Y
+# $8049(32841) := 8
+#
+ 6  POKE 254,32: POKE 255,32: POKE 32840,169: POKE 32841,0: CALL 32768: POKE 32840,177: POKE 32841,8
+#
+# -16302 ; full screen(no text)
+# -16297 ; hi-res
+# -16300 ; hi-res page 1
+# -16304 ; graphics mode
+#
+ 7  PRINT "BLOADAKA2,A$2000": POKE  - 16302,0: POKE  - 16297,0: POKE  - 16300,0: POKE  - 16304,0
+ 8  PRINT "BLOADAKA5,A$4000"
+ 9  CALL 32768
+ 10  PRINT "BLOADAKA3,A$4000"
+ 11  POKE 32769,39: POKE 32888,136: POKE 32890,255: CALL 32768: POKE 32769,0: POKE 32888,200: POKE 32890,40
+ 12  FOR O7 = 1 TO 4000: NEXT O7
+ 13  POKE 32840,169: POKE 32841,0: CALL 32768: POKE 32840,177: POKE 32641,8
+ 14  FOR O7 = 1 TO 500: NEXT O7
+ 15  POKE  - 16303,0
+ 8450  VTAB (23): HTAB (8): PRINT "    (LOADING PROGRAM)    ";
+ 8997  PRINT 
+;
+; 33 := 1 ; text window width
+; 34 := 23 ; text window top margin
+;
+ 8998  POKE 33,1: POKE 34,23
+ 8999  PRINT "RUN AKA1"
+
+;
+; AKA4
+;
+8000-   A0 00       LDY   #$00
+8002-   A9 00       LDA   #$00
+8004-   85 F9       STA   $F9
+8006-   A9 00       LDA   #$00
+8008-   85 FA       STA   $FA
+800A-   85 FB       STA   $FB
+800C-   A9 00       LDA   #$00
+800E-   85 FC       STA   $FC
+8010-   85 FD       STA   $FD
+8012-   A9 00       LDA   #$00
+8014-   85 06       STA   $06
+8016-   A5 FE       LDA   $FE		; $FF was set by AKA0 basic code
+8018-   85 07       STA   $07
+801A-   18          CLC
+801B-   A5 06       LDA   $06
+801D-   65 F9       ADC   $F9
+801F-   85 06       STA   $06
+8021-   A5 07       LDA   $07
+8023-   69 00       ADC   #$00
+8025-   85 07       STA   $07
+8027-   18          CLC
+8028-   A5 06       LDA   $06
+802A-   65 FA       ADC   $FA
+802C-   85 06       STA   $06
+802E-   A5 07       LDA   $07
+8030-   65 FB       ADC   $FB
+8032-   85 07       STA   $07
+8034-   18          CLC
+8035-   A5 06       LDA   $06
+8037-   65 FC       ADC   $FC
+8039-   85 06       STA   $06
+803B-   85 08       STA   $08
+803D-   A5 07       LDA   $07
+803F-   65 FD       ADC   $FD
+8041-   85 07       STA   $07
+8043-   18          CLC
+8044-   65 FF       ADC   $FF		; $FF was set by AKA0 basic code
+8046-   85 09       STA   $09
+8048-   B1 00       LDA   ($00),Y	; modified by AKA0 basic code.
+804A-   91 06       STA   ($06),Y
+804C-   18          CLC
+804D-   A5 FD       LDA   $FD
+804F-   69 04       ADC   #$04
+8051-   85 FD       STA   $FD
+8053-   C9 20       CMP   #$20
+8055-   D0 BB       BNE   $8012
+8057-   18          CLC
+8058-   A5 FA       LDA   $FA
+805A-   69 80       ADC   #$80
+805C-   85 FA       STA   $FA
+805E-   A5 FB       LDA   $FB
+8060-   69 00       ADC   #$00
+8062-   85 FB       STA   $FB
+8064-   C9 04       CMP   #$04
+8066-   D0 A4       BNE   $800C
+8068-   18          CLC
+8069-   A5 F9       LDA   $F9
+806B-   69 28       ADC   #$28
+806D-   85 F9       STA   $F9
+806F-   C9 78       CMP   #$78
+8071-   D0 93       BNE   $8006
+8073-   A2 00       LDX   #$00
+8075-   CA          DEX
+8076-   D0 FD       BNE   $8075
+8078-   C8          INY
+8079-   C0 28       CPY   #$28
+807B-   D0 85       BNE   $8002
+807D-   60          RTS
